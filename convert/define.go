@@ -1,9 +1,7 @@
-package block
+package convert
 
 import (
 	block_general "github.com/TriM-Organization/dream-weaver-factory/block/general"
-	_ "github.com/TriM-Organization/dream-weaver-factory/block/nemc"
-	_ "github.com/TriM-Organization/dream-weaver-factory/block/std"
 	"github.com/TriM-Organization/dream-weaver-factory/define"
 	"github.com/df-mc/worldupgrader/blockupgrader"
 	"github.com/sandertv/gophertunnel/minecraft/nbt"
