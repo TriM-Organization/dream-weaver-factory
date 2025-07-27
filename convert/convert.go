@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/df-mc/worldupgrader/itemupgrader"
+import "github.com/TriM-Organization/dream-weaver-factory/upgrader/itemupgrader"
 
 // NEMCToStdBlockRuntimeID ..
 func NEMCToStdBlockRuntimeID(rid uint32) (result uint32, found bool) {

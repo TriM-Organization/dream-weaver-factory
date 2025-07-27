@@ -5,7 +5,7 @@ import (
 	_ "github.com/TriM-Organization/dream-weaver-factory/block/nemc"
 	_ "github.com/TriM-Organization/dream-weaver-factory/block/std"
 	"github.com/TriM-Organization/dream-weaver-factory/define"
-	"github.com/df-mc/worldupgrader/blockupgrader"
+	"github.com/TriM-Organization/dream-weaver-factory/upgrader/blockupgrader"
 	"github.com/sandertv/gophertunnel/minecraft/nbt"
 )
 
