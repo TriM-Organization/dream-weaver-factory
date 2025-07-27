@@ -2,6 +2,8 @@ package chunk
 
 import (
 	"bytes"
+
+	"github.com/TriM-Organization/dream-weaver-factory/define"
 )
 
 const (
@@ -16,16 +18,17 @@ const (
 
 // EncodeSubChunk encodes a sub-chunk from a chunk into bytes. An Encoding may be passed to encode either for network or
 // disk purposed, the most notable difference being that the network encoding generally uses varints and no NBT.
-func EncodeSubChunk(c *Chunk, e Encoding, ind int) []byte {
+func EncodeSubChunk(c *SubChunk, r define.Range, ind int, e Encoding) []byte {
 	buf := bytes.NewBuffer(nil)
 
-	s := c.sub[ind]
-	_, _ = buf.Write([]byte{SubChunkVersion, byte(len(s.storages)), uint8(ind + (c.r[0] >> 4))})
-	for _, storage := range s.storages {
+	_, _ = buf.Write([]byte{SubChunkVersion, byte(len(c.storages)), uint8(ind + (r[0] >> 4))})
+	for _, storage := range c.storages {
 		encodePalettedStorage(buf, storage, nil, e)
 	}
+
 	sub := make([]byte, buf.Len())
 	_, _ = buf.Read(sub)
+
 	return sub
 }
 
