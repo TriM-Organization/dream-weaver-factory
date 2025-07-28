@@ -25,10 +25,20 @@ func init() {
 			Properties: deepCopyBlockStates(blockEntry.Block.Properties),
 			Version:    blockEntry.Block.Version,
 		})
-		newerRuntimeID := block_general.ComputeBlockHash(
+		if newerBlockState.Name == "minecraft:micro_block" {
+			continue
+		}
+		if newerBlockState.Name == "minecraft:mod_ore" {
+			continue
+		}
+
+		newerRuntimeID, found := block_general.StdStateToRuntimeID(
 			newerBlockState.Name,
 			newerBlockState.Properties,
 		)
+		if !found {
+			panic("init: Should nerver happened")
+		}
 
 		// Set mapping
 		olderToNewerBlock[blockEntry.RuntimeID] = define.BlockEntry{

@@ -92,7 +92,7 @@ func registerBlockState(s define.BlockState) {
 		blockProperties[s.Name] = s.Properties
 	}
 
-	if block_general.UseNetworkBlockRuntimeID {
+	if block_general.NEMCUseBlockNetworkIDHashes {
 		rid = hash
 	} else {
 		rid = uint32(len(blockStateMapping))

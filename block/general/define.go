@@ -2,7 +2,10 @@ package block_general
 
 import "github.com/TriM-Organization/dream-weaver-factory/define"
 
-const UseNetworkBlockRuntimeID = true
+const (
+	NEMCUseBlockNetworkIDHashes = true
+	StdUseBlockNetworkIDHashes  = false
+)
 
 var (
 	// NEMCAirRuntimeID is the runtime ID of an air block in netease Minecraft.
