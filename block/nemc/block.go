@@ -19,6 +19,8 @@ var (
 
 	// blockProperties ..
 	blockProperties = map[string]map[string]any{}
+	// runtimeIDToHashes ..
+	runtimeIDToHashes = map[uint32]uint32{}
 	// blockStateMapping holds a map for looking up a block entry by the network runtime id it produces.
 	blockStateMapping = map[uint32]define.BlockEntry{}
 )
@@ -56,11 +58,15 @@ func init() {
 	}
 
 	block_general.NEMCRuntimeIDToState = func(runtimeID uint32) (name string, properties map[string]any, found bool) {
-		blockEntry, found := blockStateMapping[runtimeID]
-		if found {
-			return blockEntry.Block.Name, blockEntry.Block.Properties, true
+		blockHashes, found := runtimeIDToHashes[runtimeID]
+		if !found {
+			return "", nil, false
 		}
-		return "", nil, false
+		blockEntry, found := blockStateMapping[blockHashes]
+		if !found {
+			return "", nil, false
+		}
+		return blockEntry.Block.Name, blockEntry.Block.Properties, true
 	}
 	block_general.NEMCStateToRuntimeID = func(name string, properties map[string]any) (runtimeID uint32, found bool) {
 		if !strings.HasPrefix(name, "minecraft:") {
@@ -106,5 +112,6 @@ func registerBlockState(s define.BlockState) {
 		RuntimeID: rid,
 	}
 	blockStateMapping[hash] = blockEntry
+	runtimeIDToHashes[rid] = hash
 	block_general.NEMCAllBlocks = append(block_general.NEMCAllBlocks, blockEntry)
 }
