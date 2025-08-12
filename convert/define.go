@@ -65,6 +65,8 @@ func init() {
 			}
 		}
 	}
+
+	monkeyFix()
 }
 
 // deepCopyBlockStates ..
@@ -72,4 +74,45 @@ func deepCopyBlockStates(src map[string]any) (dst map[string]any) {
 	nbtBytes, _ := nbt.MarshalEncoding(src, nbt.LittleEndian)
 	_ = nbt.UnmarshalEncoding(nbtBytes, &dst, nbt.LittleEndian)
 	return
+}
+
+// monkeyFix (Fix by hand and eyes)
+func monkeyFix() {
+	// Skull block
+	{
+		skullBlockNames := []string{
+			"minecraft:skeleton_skull",
+			"minecraft:wither_skeleton_skull",
+			"minecraft:zombie_head",
+			"minecraft:player_head",
+			"minecraft:creeper_head",
+			"minecraft:dragon_head",
+			"minecraft:piglin_head",
+		}
+
+		for _, blockname := range skullBlockNames {
+			for facingDirection := range int32(6) {
+				blockState := map[string]any{
+					"facing_direction": facingDirection,
+				}
+
+				olderRuntimeID, found := block_general.NEMCStateToRuntimeID("minecraft:skull", blockState)
+				if !found {
+					panic("monkeyFix: Should nerver happened")
+				}
+				newerRuntimeID, found := block_general.StdStateToRuntimeID(blockname, blockState)
+				if !found {
+					panic("monkeyFix: Should nerver happened")
+				}
+
+				newerToOlderBlock[newerRuntimeID] = define.BlockEntry{
+					Block: define.BlockState{
+						Name:       "minecraft:skull",
+						Properties: blockState,
+					},
+					RuntimeID: olderRuntimeID,
+				}
+			}
+		}
+	}
 }
