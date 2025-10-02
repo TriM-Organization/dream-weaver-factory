@@ -37,7 +37,7 @@ func init() {
 			newerBlockState.Properties,
 		)
 		if !found {
-			panic("init: Should nerver happened")
+			panic("init: Should never happened")
 		}
 
 		// Set mapping
@@ -59,7 +59,7 @@ func init() {
 			if hugeMushroomBits == 10 || hugeMushroomBits == 15 {
 				_, ok := newerToOlderBlock[newerRuntimeID]
 				if !ok {
-					panic("init: Should nerver happened")
+					panic("init: Should never happened")
 				}
 				newerToOlderBlock[newerRuntimeID] = blockEntry
 			}
@@ -98,11 +98,11 @@ func monkeyFix() {
 
 				olderRuntimeID, found := block_general.NEMCStateToRuntimeID("minecraft:skull", blockState)
 				if !found {
-					panic("monkeyFix: Should nerver happened")
+					panic("monkeyFix: Should never happened")
 				}
 				newerRuntimeID, found := block_general.StdStateToRuntimeID(blockname, blockState)
 				if !found {
-					panic("monkeyFix: Should nerver happened")
+					panic("monkeyFix: Should never happened")
 				}
 
 				newerToOlderBlock[newerRuntimeID] = define.BlockEntry{
