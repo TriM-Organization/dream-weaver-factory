@@ -2,6 +2,7 @@ package chunk
 
 import (
 	"bytes"
+	"sync"
 
 	"github.com/TriM-Organization/dream-weaver-factory/define"
 )
@@ -12,14 +13,25 @@ const (
 	SubChunkVersion = 9
 	// CurrentBlockVersion is the current version of blocks (states) of the game. This version is composed
 	// of 4 bytes indicating a version, interpreted as a big endian int. The current version represents
-	// 1.16.0.14 {1, 16, 0, 14}.
-	CurrentBlockVersion int32 = 18040335
+	// 1.21.40.1 {1, 21, 40, 1}.
+	CurrentBlockVersion int32 = 18163713
 )
+
+// pool is used to pool byte buffers used for encoding chunks.
+var pool = sync.Pool{
+	New: func() any {
+		return bytes.NewBuffer(make([]byte, 0, 1024))
+	},
+}
 
 // EncodeSubChunk encodes a sub-chunk from a chunk into bytes. An Encoding may be passed to encode either for network or
 // disk purposed, the most notable difference being that the network encoding generally uses varints and no NBT.
 func EncodeSubChunk(c *SubChunk, r define.Range, ind int, e Encoding) []byte {
-	buf := bytes.NewBuffer(nil)
+	buf := pool.Get().(*bytes.Buffer)
+	defer func() {
+		buf.Reset()
+		pool.Put(buf)
+	}()
 
 	_, _ = buf.Write([]byte{SubChunkVersion, byte(len(c.storages)), uint8(ind + (r[0] >> 4))})
 	for _, storage := range c.storages {
